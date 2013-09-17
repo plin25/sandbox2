@@ -7,6 +7,8 @@ After making:
 
 ./sandbox prog_file [data_file]
 
+Preloading from Data File has NOT been tested yet :(
+
 SYNTAX
 ========
 
