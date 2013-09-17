@@ -3,6 +3,10 @@ sandbox2
 
 Sandbox -- homework for NYU-Poly's CS 9163 Application Security
 
+After making:
+
+./sandbox prog_file [data_file]
+
 SYNTAX
 ========
 
