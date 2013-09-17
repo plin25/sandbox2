@@ -22,22 +22,35 @@ COMMAND	ARGUMENTS		//	MEANING
 
 
 // Setting/Arithmetic
+
 ADD		$T	$S1	$S2		//	$T<-$S1+$S2
+
 SUB		$T	$S1	$S2		//	$T<-$S1-$S2
+
 COP		$T	$S			//	$T<-$S
+
 SET		$T	NUM			//	$T<-NUM
 
 
 // Branching
+
 LABEL	#L				//	define label #L
+
 BEQ		#L	$S1	$S2		//	IF $S1=$S2 => #L
+
 BNE		#L	$S1	$S2		//	IF $S1!=$S2 => #L
+
 BG		#L	$S1	$S2		//	IF $S1>$S2 => #L
+
 BL		#L	$S1	$S2		//	IF $S1<$S2 => #L
+
 BGE		#L	$S1	$S2		//	IF $S1>=$S2 => #L
+
 BLE		#L	$S1	$S2		//	IF $S1<=$S2 => #L
 
 
 // Miscellaneous
+
 DISP	$T				//	display $T
+
 EXIT	NUM				//	"Return code NUM" if NUM!=0, exit gracefully ohterwise
