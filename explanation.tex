@@ -1,0 +1,65 @@
+\documentclass{article}
+
+\usepackage{amsthm}
+
+\newcommand{\get}{$\gets$}
+
+\title{Explanation of Sandbox\\\normalsize{and proof that it is Turing complete}}
+\author{Patrick Lin}
+
+\begin{document}
+\maketitle
+
+We use the following terminology:
+
+\begin{itemize}
+\item {[X]} means the value at memory location X.
+\item \$X denotes that a memory address is desired.
+\item \#L denotes that a label is desired. If a label is used in a Branching instruction it must be set somewhere using a Label instruction.
+\item N denotes an integer is desired.
+\item Memory addresses range from 1 to 1048576. If the address is negative, then the value stored at the positive value of the address is used instead. For example: if [20]=3, then 11COP -20 10" will be translated to 11COP 3 10"
+\end{itemize}
+
+The Sandbox, as of 17 Sep 2013, supports the following functions in its program files:
+
+\begin{itemize}
+\item ADD\quad\$t\quad\$s1\quad\$s2\qquad// [\$t]\get[\$s1]+[\$s2]
+\item SUB\quad\$t\quad\$s1\quad\$s2\qquad// [\$t]\get[\$s1]-[\$s2]
+\item COP\quad\$t\quad\$s\qquad// [\$t]\get[\$s]
+\item SET\quad\$t\quad N\qquad// [\$t]\get N
+\item BEQ\quad\#L\quad\$s1\quad\$s2\qquad// IF [\$s1]=[\$s2] GOTO \#L
+\item Equivalents for BNE ($\ne$), BG ($>$), BL ($<$), BGE ($\ge$), BLE ($\le$)
+\item DISP\quad\$t \qquad// Displays [\$t]
+\item LABEL\quad\#L \qquad// Create Label \#L
+\item EXIT\quad N\qquad// Exits if N=0, otherwise prints ``Return code N" first
+\end{itemize}
+
+This is a simple mode lthat losely follows assembly syntax.
+
+It also (theoretically) supports preloading items into memory, but this has not yet been tested.
+
+\pagebreak
+
+The Sandbox would Turing Complete if we assumed an infinite memory, instead of being limited to 1048576 locations.
+
+\begin{proof}
+	A Turing machine needs to support the following operations:
+	\begin{itemize}
+	\item Read the value at the current location on the tape
+	\item Based on the read value and the current state:
+		\begin{itemize}
+			\item Write a value to the current location to the tape (can be the same as before)
+			\item Change to a new state (can be the same as before)
+			\item Move left or right on the tape (some versions allow non-movement)
+		\end{itemize}
+	\end{itemize}
+	All such programs can be simulated on this sandbox using a variety of SETs, ADDs, SUBs, and BEQs:
+	
+	First, we use two fixed locations to hold the current location and the current state.
+	
+	We need to see if the pair of the read value and the current state corresponds to a rule. To do this, for each rule, we can SET the value and state to some unused place in memory, and then see if the read value and current state match using BEQs. Then, we can use SETs to set the new value and state, and use ADD/SUB to move the location right/left.
+	
+	Thus, any Turing machine can be simulated on the sandbox.
+\end{proof}
+
+\end{document}
