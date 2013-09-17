@@ -1,0 +1,12 @@
+// Countdown from 10 to 1
+SET		1	10			// $1 = 10
+SET		20	1			// $20 = 1
+
+LABEL	1				// While $1 != $22
+DISP	1				// Disp $1
+SUB		1	1	20		// $1 = $1 - 1
+BNE		1	1	20
+
+DISP	1
+
+EXIT	0

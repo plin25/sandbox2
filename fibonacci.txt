@@ -1,0 +1,18 @@
+// Fibonacci
+SET		1	1
+SET		2	1
+SET		20	1
+SET		21	2
+SET		22	3
+SET		23	10
+DISP	1
+DISP	2
+
+LABEL	1				// While $22 <= $23
+ADD		-22	-20	-21
+DISP	-22
+ADD		20	20	1
+ADD		21	21	1
+ADD		22	22	1
+BLE		1	22	23
+EXIT	0
