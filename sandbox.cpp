@@ -107,7 +107,7 @@ int main( int argc, char** argv ) {
 				(*memory)[target] = (*memory)[source_1] + (*memory)[source_2];
 			else
 				(*memory)[target] = (*memory)[source_1] - (*memory)[source_2];
-		} else if ( command == "COP" ) {
+		} else if ( command == "COPY" ) {
 			int target, source;
 			if ( ! ( prog_str >> target >> source ) ) {
 				cerr << "Error: Program file format error 2.\n";

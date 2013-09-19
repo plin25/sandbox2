@@ -1,7 +1,7 @@
 sandbox2
 ========
 
-Sandbox -- homework for NYU-Poly's CS 9163 Application Security
+Turing Complete Sandbox -- homework 1 for NYU-Poly's CS 9163 Application Security
 
 After making:
 
@@ -22,41 +22,31 @@ Terminology:
 
 -NUM denotes an integer is desired.
 
--Memory addresses range from 1 to 1048576. If the address is negative, then the value stored at the positive value of the address is used instead. For example: if [20]=3, then "COP -20 10" will be translated to "COP 3 10"
+-Memory addresses range from 1 to 1048576. If the address is negative, then the value stored at the positive value of the address is used instead, i.e. -20 is translated to [20]. For example: if [20]=3, then "COPY -20 10" will be translated to "COPY 3 10"
 
-COMMAND	ARGUMENTS		//	MEANING
+COMMAND		ARGUMENTS			//	MEANING
 
 
 // Setting/Arithmetic
 
 ADD		$T	$S1	$S2		//	$T<-$S1+$S2
-
 SUB		$T	$S1	$S2		//	$T<-$S1-$S2
-
-COP		$T	$S			//	$T<-$S
-
+COPY		$T	$S			//	$T<-$S
 SET		$T	NUM			//	$T<-NUM
 
 
 // Branching
 
-LABEL	#L				//	define label #L
-
+LABEL		#L				//	define label #L
 BEQ		#L	$S1	$S2		//	IF $S1=$S2 => #L
-
 BNE		#L	$S1	$S2		//	IF $S1!=$S2 => #L
-
 BG		#L	$S1	$S2		//	IF $S1>$S2 => #L
-
 BL		#L	$S1	$S2		//	IF $S1<$S2 => #L
-
 BGE		#L	$S1	$S2		//	IF $S1>=$S2 => #L
-
 BLE		#L	$S1	$S2		//	IF $S1<=$S2 => #L
 
 
 // Miscellaneous
 
 DISP	$T				//	display $T
-
 EXIT	NUM				//	"Return code NUM" if NUM!=0, exit gracefully ohterwise
