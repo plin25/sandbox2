@@ -49,4 +49,4 @@ BLE		#L	$S1	$S2		//	IF $S1<=$S2 => #L
 // Miscellaneous
 
 DISP	$T				//	display $T
-EXIT	NUM				//	"Return code NUM" if NUM!=0, exit gracefully ohterwise
+EXIT	NUM				//	"Return code NUM" if NUM!=0, exit gracefully otherwise
