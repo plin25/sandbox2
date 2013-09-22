@@ -5,6 +5,10 @@
 // #include <vector>
 #include <map>
 #include <cmath>
+#include <limits>
+
+#define MAX_INT numeric_limits<int>::max()
+#define MIN_INT numeric_limits<int>::min()
 
 using namespace std;
 
@@ -24,18 +28,28 @@ bool process( int & addr ) {
 	if ( mem_oob(addr) )
 		return false;
 	return true;
+}		
+
+int overunderflow( int a, int b, bool add_flag ) {
+	if ( ! add_flag )
+		b *= -1;
+	if ( a > 0 && b > 0 )
+		return MAX_INT - a < b;
+	else if ( a < 0 && b < 0 )
+		return -(MIN_INT - a > b);
+	return 0;
 }
 
 // From: http://stackoverflow.com/questions/1798112/removing-leading-and-trailing-spaces-from-a-string
 string trim( const string & str, const string & whitespace = " \t\r" ) {
-    size_t strBegin = str.find_first_not_of(whitespace);
-    if (strBegin == string::npos)
+    size_t strBegin = str.find_first_not_of( whitespace );
+    if ( strBegin == string::npos )
         return ""; // no content
 
-    size_t strEnd = str.find_last_not_of(whitespace);
+    size_t strEnd = str.find_last_not_of( whitespace );
     size_t strRange = strEnd - strBegin + 1;
 
-    return str.substr(strBegin, strRange);
+    return str.substr( strBegin, strRange );
 }
 
 int main( int argc, char** argv ) {
@@ -122,6 +136,11 @@ int main( int argc, char** argv ) {
 				cerr << "Error: Address out of bounds (line " << line_number << ").\n";
 				return 3;
 			}
+			int overunder = overunderflow( (*memory)[source_1], (*memory)[source_2], command == "ADD" );
+			if ( overunder > 0 )
+				cerr << "Warning: Integer Overflow detected, line " << line_number << ".\n";
+			else if ( overunder < 0 )
+				cerr << "Warning: Integer Underflow detected, line " << line_number << ".\n";
 			if ( command == "ADD" )
 				(*memory)[target] = (*memory)[source_1] + (*memory)[source_2];
 			else
@@ -176,12 +195,13 @@ int main( int argc, char** argv ) {
 				flag = (*memory)[source_1] >= (*memory)[source_2];
 			else if ( command == "BL" )
 				flag = (*memory)[source_1] < (*memory)[source_2];
-			else if ( command == "BLE" )
+			else // if ( command == "BLE" )
 				flag = (*memory)[source_1] <= (*memory)[source_2];
 			
 			if ( flag ) {
 				// Seek to the beginning of the file and scan
 				// until the specified label is found
+				
 				prog_file.clear();
 				prog_file.seekg( 0, ios::beg );
 				line_number = 0;
