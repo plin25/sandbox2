@@ -8,10 +8,22 @@
 
 using namespace std;
 
+map<int,int> * memory;
+
 bool mem_oob( int addr ) {
 	// This is arbitrary. Perhaps it would be better
 	// to make it system dependent?
 	return ( addr < 1 || addr > 1048576 );
+}
+
+bool process( int & addr ) {
+	if ( mem_oob(abs(addr)) )
+		return false;
+	if ( addr < 0 )
+		addr = (*memory)[-addr];
+	if ( mem_oob(addr) )
+		return false;
+	return true;
 }
 
 int main( int argc, char** argv ) {
@@ -28,7 +40,7 @@ int main( int argc, char** argv ) {
 		return 1;
 	}
 	
-	map<int,int> * memory = new map<int,int>;
+	memory = new map<int,int>;
 	
 	// Read Data File =========================================================
 	if ( argc > 2 ) {
@@ -89,17 +101,7 @@ int main( int argc, char** argv ) {
 				cerr << "Error: Program file format error 1.\n";
 				return 2;
 			}
-			if ( mem_oob(abs(target)) || mem_oob(abs(source_1)) || mem_oob(abs(source_2)) ) {
-				cerr << "Error: Address out of bounds.\n";
-				return 3;
-			}
-			if ( target < 0 )
-				target = (*memory)[-target];
-			if ( source_1 < 0 )
-				source_1 = (*memory)[-source_1];
-			if ( source_2 < 0 )
-				source_2 = (*memory)[-source_2];
-			if ( mem_oob(target) || mem_oob(source_1) || mem_oob(source_2) ) {
+			if ( ! ( process(target) && process(source_1) && process(source_2) ) ) {
 				cerr << "Error: Address out of bounds.\n";
 				return 3;
 			}
@@ -113,19 +115,7 @@ int main( int argc, char** argv ) {
 				cerr << "Error: Program file format error 2.\n";
 				return 2;
 			}
-			if ( mem_oob(abs(target)) || mem_oob(abs(source)) ) {
-				cerr << "Error: Address out of bounds.\n";
-				return 3;
-			}
-			if ( target < 0 )
-				target = (*memory)[-target];
-			if ( source < 0 )
-				source = (*memory)[-source];
-			if ( mem_oob(target) || mem_oob(source) ) {
-				cerr << "Error: Address out of bounds.\n";
-				return 3;
-			}
-			if ( mem_oob(target) || mem_oob(source) ) {
+			if ( ! ( process(target) && process(source) ) ) {
 				cerr << "Error: Address out of bounds.\n";
 				return 3;
 			}
@@ -136,13 +126,7 @@ int main( int argc, char** argv ) {
 				cerr << "Error: Program file format error 3.\n";
 				return 2;
 			}
-			if ( mem_oob(abs(target)) ) {
-				cerr << "Error: Address out of bounds.\n";
-				return 3;
-			}
-			if ( target < 0 )
-				target = (*memory)[-target];
-			if ( mem_oob(target) ) {
+			if ( ! process(target) ) {
 				cerr << "Error: Address out of bounds.\n";
 				return 3;
 			}
@@ -155,15 +139,7 @@ int main( int argc, char** argv ) {
 				cerr << "Error: Program file format error 4.\n";
 				return 2;
 			}
-			if ( mem_oob(label) || mem_oob(abs(source_1)) || mem_oob(abs(source_2)) ) {
-				cerr << "Error: Address out of bounds.\n";
-				return 3;
-			}
-			if ( source_1 < 0 )
-				source_1 = (*memory)[-source_1];
-			if ( source_2 < 0 )
-				source_2 = (*memory)[-source_2];
-			if ( mem_oob(source_1) || mem_oob(source_2) ) {
+			if ( ! ( process(source_1) && process(source_2) ) ) {
 				cerr << "Error: Address out of bounds.\n";
 				return 3;
 			}
@@ -210,20 +186,14 @@ int main( int argc, char** argv ) {
 				}
 			}
 		} else if ( command == "LABEL" ) {
-			// Do nothing
+			// Do nothing. This will be taken care of in branching.
 		} else if ( command == "DISP" ) {
 			int source;
 			if ( ! ( prog_str >> source ) ) {
 				cerr << "Error: Program file format error 8.\n";
 				return 2;
 			}
-			if ( mem_oob(abs(source)) ) {
-				cerr << "Error: Address out of bounds.\n";
-				return 3;
-			}
-			if ( source < 0 )
-				source = (*memory)[-source];
-			if ( mem_oob(source) ) {
+			if ( ! process(source) ) {
 				cerr << "Error: Address out of bounds.\n";
 				return 3;
 			}
