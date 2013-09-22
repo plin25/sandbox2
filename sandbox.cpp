@@ -26,6 +26,18 @@ bool process( int & addr ) {
 	return true;
 }
 
+// From: http://stackoverflow.com/questions/1798112/removing-leading-and-trailing-spaces-from-a-string
+string trim( const string & str, const string & whitespace = " \t\r" ) {
+    size_t strBegin = str.find_first_not_of(whitespace);
+    if (strBegin == string::npos)
+        return ""; // no content
+
+    size_t strEnd = str.find_last_not_of(whitespace);
+    size_t strRange = strEnd - strBegin + 1;
+
+    return str.substr(strBegin, strRange);
+}
+
 int main( int argc, char** argv ) {
 	if ( argc < 2 ) {
 		cerr << "Error: No program file specified.\n";
@@ -88,9 +100,7 @@ int main( int argc, char** argv ) {
 			cerr << "Error: Program File read error.\n";
 			return 1;
 		}
-		if ( prog_line[prog_line.size()-1] == '\r' )
-			prog_line.resize(prog_line.size()-1);
-		if ( prog_line.empty() )
+		if ( trim(prog_line).empty() )
 			continue;
 		istringstream prog_str(prog_line);
 		string command;
@@ -163,9 +173,7 @@ int main( int argc, char** argv ) {
 				
 				string read_line;
 				while ( getline( prog_file, read_line ) ) {
-					if ( read_line[read_line.size()-1] == '\r' )
-						read_line.resize(read_line.size()-1);
-					if ( read_line.empty() )
+					if ( trim(read_line).empty() )
 						continue;
 					istringstream read_str(read_line);
 					string read_command;
